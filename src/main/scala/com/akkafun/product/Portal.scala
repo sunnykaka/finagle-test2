@@ -16,7 +16,7 @@ object Portal {
 
     val client: Service[Request, Response] = ClientBuilder()
       .codec(Http())
-      .hosts(new InetSocketAddress(8081))
+      .hosts(new InetSocketAddress(8082))
       .hostConnectionLimit(1)
       .build()
 

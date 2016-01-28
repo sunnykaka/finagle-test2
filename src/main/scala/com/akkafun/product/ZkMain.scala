@@ -15,7 +15,7 @@ object ZkMain {
 
   def main(args: Array[String]): Unit = {
 
-    val s1: Service[Request, Response] = new ProductController.InvestService
+    val s1: Service[Request, Response] = new ProductController(true).InvestService
 
     val server: Server = ServerBuilder()
       .codec(Http())
