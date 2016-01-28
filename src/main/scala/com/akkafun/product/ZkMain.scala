@@ -15,13 +15,15 @@ object ZkMain {
 
   def main(args: Array[String]): Unit = {
 
-    val s1: Service[Request, Response] = new ProductController(true).InvestService
+    val app = Application.init()
+
+    val productController = new ProductController(app)
 
     val server: Server = ServerBuilder()
       .codec(Http())
       .bindTo(new InetSocketAddress("127.0.0.1", 8082))
       .name("productserver")
-      .build(s1)
+      .build(new HttpServicePicker(productController.investService))
 
     server.announce("zk!127.0.0.1:2181,127.0.0.1:2182,127.0.0.1:2183!/f/products!0").respond {
       case Return(a) => println(s"announcement: $a")

@@ -20,7 +20,7 @@ object Portal {
       .hostConnectionLimit(1)
       .build()
 
-    val request = Request("/", ("userId", "1"), ("amount", "2"), ("productId", "3"), ("channel", "4"))
+    val request = Request("/", ("userId", "1"), ("amount", "2"), ("productId", "3"), ("channel", "4"), ("__serviceName", "invest"))
     client(request) onSuccess { response =>
       val responseString = response.contentString
       println("))) Received result for authorized request: " + responseString)
