@@ -3,7 +3,7 @@ package com.akkafun.product
 import java.net.InetSocketAddress
 
 import com.akkafun.product.filter.WrapProductFilter
-import com.akkafun.product.service.{DefaultProductServiceComponent, DefaultUserServiceComponent, DefaultStorageServiceComponent}
+import com.akkafun.product.service.{DefaultProductServiceComponent, DefaultUserServiceComponent, DefaultTradeServiceComponent}
 import com.twitter.finagle.Service
 import com.twitter.finagle.builder.ClientBuilder
 import com.twitter.finagle.http.{Http, Response, Request}
@@ -29,14 +29,14 @@ object Application {
         .build()
     }
 
-    val storageComponent = new DefaultStorageServiceComponent{}
-    val storageService = storageComponent.storageService
+    val tradeComponent = new DefaultTradeServiceComponent{}
+    val tradeService = tradeComponent.tradeService
 
     val userComponent = new DefaultUserServiceComponent{}
     val userService = userComponent.userService
 
     val productServiceComponent = new DefaultProductServiceComponent with
-      DefaultStorageServiceComponent with
+      DefaultTradeServiceComponent with
       DefaultUserServiceComponent{
 
       override val userInvoker: Service[Request, Response] = self.userInvoker
@@ -51,8 +51,8 @@ object Application {
 trait Application {
   val userInvoker: Service[Request, Response]
 
-  val storageComponent: DefaultStorageServiceComponent
-  val storageService: DefaultStorageServiceComponent#StorageService
+  val tradeComponent: DefaultTradeServiceComponent
+  val tradeService: DefaultTradeServiceComponent#TradeService
 
   val userComponent: DefaultUserServiceComponent
   val userService: DefaultUserServiceComponent#UserService

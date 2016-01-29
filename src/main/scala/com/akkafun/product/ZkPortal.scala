@@ -17,7 +17,7 @@ object ZkPortal {
       .dest("zk!127.0.0.1:2181,127.0.0.1:2182,127.0.0.1:2183!/f/products")
       .build()
 
-    val request = Request("/", ("userId", "1"), ("amount", "2"), ("productId", "3"), ("channel", "4"), ("withZk", "true"))
+    val request = Request("/", ("userId", "1"), ("amount", "2000000"), ("productId", "3"), ("channel", "4"), ("__serviceName", "invest"), ("withZk", "true"))
     client(request) onSuccess { response =>
       val responseString = response.contentString
       println("))) Received result for authorized request: " + responseString)

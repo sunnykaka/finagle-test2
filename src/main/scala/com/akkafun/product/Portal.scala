@@ -20,12 +20,11 @@ object Portal {
       .hostConnectionLimit(1)
       .build()
 
-    val request = Request("/", ("userId", "1"), ("amount", "2"), ("productId", "3"), ("channel", "4"), ("__serviceName", "invest"))
+    val request = Request("/", ("userId", "1"), ("amount", "2000000"), ("productId", "3"), ("channel", "4"), ("__serviceName", "invest"))
     client(request) onSuccess { response =>
-      val responseString = response.contentString
-      println("))) Received result for authorized request: " + responseString)
+      println(s"response status: ${response.status}, response string: ${response.contentString} ")
     } onFailure { error =>
-      println("))) Unauthorized request errored (as desired): " + error.getClass.getName)
+      println(s"found error: ${error.getMessage}, error class: ${error.getClass.getName}")
     } ensure {
       client.close()
     }

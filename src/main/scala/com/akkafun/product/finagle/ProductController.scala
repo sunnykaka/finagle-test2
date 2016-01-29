@@ -23,12 +23,14 @@ class ProductController(app: Application) { self =>
 
       productService.invest(userId, amount, pr.product, channel) map {
         case Left(e) =>
+          println(s"invoke invest found error: $e" )
           val response = Response(Version.Http11, Status.InternalServerError)
           response.contentString = e.getMessage
           response
         case Right(v) =>
+          println(s"invoke invest result: $v" )
           val response = Response(Version.Http11, Status.Ok)
-          response.contentString = v.getOrElse(0L).toString
+          response.contentString = v.toString
           response
       }
     }

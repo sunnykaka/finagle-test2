@@ -2,6 +2,7 @@ package com.akkafun.product
 
 import com.akkafun.product.Products.BorrowStatus
 import com.akkafun.product.Products.BorrowStatus.BorrowStatus
+import com.akkafun.product.Trade.TradeType.TradeType
 
 
 case class User(id: Long,
@@ -32,7 +33,6 @@ object Products {
 
   object BorrowStatus extends Enumeration() {
     type BorrowStatus = Value
-    //1 默认等待资料 2 正在招标中 3 已满标)
     val Waiting = Value("Waiting")
     val Tendering = Value("Tendering")
     val Full = Value("Full")
@@ -45,3 +45,17 @@ object Products {
   )
 }
 
+case class Trade(id: Long,
+                 userId: Long,
+                 productId: Long,
+                 tradeType: TradeType)
+
+object Trade {
+
+  object TradeType extends Enumeration() {
+    type TradeType = Value
+    val Invest = Value("Invest")
+    val Deposit = Value("Deposit")
+  }
+
+}
