@@ -7,6 +7,8 @@ import com.akkafun.product.service.{DefaultProductServiceComponent, DefaultUserS
 import com.twitter.finagle.Service
 import com.twitter.finagle.builder.ClientBuilder
 import com.twitter.finagle.http.{Http, Response, Request}
+import com.twitter.finagle.stats.DefaultStatsReceiver
+import com.twitter.finagle.zipkin.thrift.ZipkinTracer
 
 /**
   * Created by Administrator on 2016/1/28.
@@ -23,9 +25,10 @@ object Application {
         .build()
     } else {
       ClientBuilder()
-        .codec(Http())
+        .codec(Http().enableTracing(enable = true))
         .hosts(new InetSocketAddress(8081))
         .hostConnectionLimit(1)
+        .tracer(ZipkinTracer.mk("192.168.99.100", 9410, DefaultStatsReceiver, 1.0f))
         .build()
     }
 
