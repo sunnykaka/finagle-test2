@@ -4,10 +4,7 @@ import java.net.InetSocketAddress
 
 import com.akkafun.product.finagle.ProductController
 import com.twitter.finagle.Http
-import com.twitter.finagle.builder.{Server, ServerBuilder}
-import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finagle.stats.DefaultStatsReceiver
-import com.twitter.finagle.tracing.ConsoleTracer
 import com.twitter.finagle.zipkin.thrift.ZipkinTracer
 import com.twitter.util.Await
 
@@ -18,7 +15,7 @@ object Main {
 
   def main(args: Array[String]): Unit = {
 
-    val useZk = true
+    val useZk = false
 
     val app = Application.init(useZk)
 

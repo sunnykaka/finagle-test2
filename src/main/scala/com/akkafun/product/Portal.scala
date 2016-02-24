@@ -13,7 +13,7 @@ object Portal {
 
   def main(args: Array[String]): Unit = {
 
-    val useZk = true
+    val useZk = false
 
     val dest = if(useZk) "zk!127.0.0.1:2181,127.0.0.1:2182,127.0.0.1:2183!/f/products" else "127.0.0.1:8082"
 
