@@ -1,14 +1,11 @@
 package com.akkafun.product
 
-import java.net.InetSocketAddress
-
 import com.akkafun.product.filter.WrapProductFilter
-import com.akkafun.product.service.{DefaultProductServiceComponent, DefaultUserServiceComponent, DefaultTradeServiceComponent}
-import com.twitter.finagle.Service
-import com.twitter.finagle.builder.ClientBuilder
-import com.twitter.finagle.http.{Http, Response, Request}
+import com.akkafun.product.service.{DefaultProductServiceComponent, DefaultTradeServiceComponent, DefaultUserServiceComponent}
+import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finagle.stats.DefaultStatsReceiver
 import com.twitter.finagle.zipkin.thrift.ZipkinTracer
+import com.twitter.finagle.{Http, Service}
 
 /**
   * Created by Administrator on 2016/1/28.
@@ -17,20 +14,14 @@ object Application {
 
 
   def init(useZk: Boolean = false): Application = new Application { self =>
-    val userInvoker: Service[Request, Response] = if(useZk) {
-      ClientBuilder()
-        .codec(Http())
-        .hostConnectionLimit(10)
-        .dest("zk!127.0.0.1:2181,127.0.0.1:2182,127.0.0.1:2183!/f/users")
-        .build()
-    } else {
-      ClientBuilder()
-        .codec(Http().enableTracing(enable = true))
-        .hosts(new InetSocketAddress(8081))
-        .hostConnectionLimit(1)
-        .tracer(ZipkinTracer.mk("192.168.99.100", 9410, DefaultStatsReceiver, 1.0f))
-        .build()
-    }
+
+    val dest = if(useZk) "zk!127.0.0.1:2181,127.0.0.1:2182,127.0.0.1:2183!/f/users" else "127.0.0.1:8081"
+
+    val userInvoker: Service[Request, Response] = Http.client.
+      withSessionPool.maxSize(10).
+      withLabel("product-user-client").
+      withTracer(ZipkinTracer.mk("192.168.99.100", 9410, DefaultStatsReceiver, 1.0f)).
+      newService(dest)
 
     val tradeComponent = new DefaultTradeServiceComponent{}
     val tradeService = tradeComponent.tradeService
